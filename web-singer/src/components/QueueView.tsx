@@ -75,7 +75,7 @@ export function QueueView({ sessionId, singerName, refreshTrigger }: QueueViewPr
             onClick={loadQueue}
             disabled={isLoading}
           >
-            {isLoading ? '...' : '↻ Refresh'}
+            {isLoading ? '⏳' : '↻'}
           </button>
         </div>
       </div>
