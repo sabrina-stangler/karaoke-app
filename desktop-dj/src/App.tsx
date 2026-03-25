@@ -12,6 +12,7 @@ function App() {
   const [session, setSession] = useState<Session | null>(null);
   const [wsConnected, setWsConnected] = useState(false);
   const [apiConnected, setApiConnected] = useState(false);
+  const [activeTab, setActiveTab] = useState<'queue' | 'settings'>('queue');
 
   // Check API connectivity
   useEffect(() => {
@@ -57,6 +58,20 @@ function App() {
       <header className="app-header">
         <div className="header-content">
           <h1>🎤 Karaoke Desktop DJ</h1>
+          <div className="header-tabs">
+            <button
+              className={`tab-btn ${activeTab === 'queue' ? 'tab-active' : ''}`}
+              onClick={() => setActiveTab('queue')}
+            >
+              Queue
+            </button>
+            <button
+              className={`tab-btn ${activeTab === 'settings' ? 'tab-active' : ''}`}
+              onClick={() => setActiveTab('settings')}
+            >
+              ⚙ Settings
+            </button>
+          </div>
           <div className="connection-status">
             <div className={`status-badge ${apiConnected ? 'connected' : 'disconnected'}`}>
               API: {apiConnected ? 'Connected' : 'Disconnected'}
@@ -69,28 +84,28 @@ function App() {
       </header>
 
       <main className="app-main">
-        <div className="app-container">
-          <div className="left-panel">
+        {activeTab === 'queue' ? (
+          <div className="app-container">
+            {session ? (
+              <QueueDisplay sessionId={session.id} />
+            ) : (
+              <div className="no-session-prompt">
+                No active session. Go to <button className="link-btn" onClick={() => setActiveTab('settings')}>Settings</button> to create one.
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="app-container settings-layout">
             <SessionManager
               session={session}
               onSessionCreated={handleSessionCreated}
               onSessionEnded={handleSessionEnded}
             />
             {session && (
-              <MusicLibrary
-                sessionId={session.id}
-              />
+              <MusicLibrary sessionId={session.id} />
             )}
           </div>
-
-          <div className="right-panel">
-            {session && (
-              <QueueDisplay
-                sessionId={session.id}
-              />
-            )}
-          </div>
-        </div>
+        )}
       </main>
     </div>
   );

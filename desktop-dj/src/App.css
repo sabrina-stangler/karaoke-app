@@ -74,10 +74,12 @@ body {
 .app-container {
   max-width: 1400px;
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+}
+
+.settings-layout {
+  display: flex;
+  flex-direction: column;
   gap: 24px;
-  height: 100%;
 }
 
 .left-panel {
@@ -89,4 +91,55 @@ body {
 .right-panel {
   display: flex;
   flex-direction: column;
+}
+
+.header-tabs {
+  display: flex;
+  gap: 8px;
+}
+
+.tab-btn {
+  padding: 8px 18px;
+  border-radius: 8px;
+  border: 2px solid #d1d5db;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 500;
+  color: #4b5563;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tab-btn:hover {
+  border-color: #7c3aed;
+  color: #7c3aed;
+}
+
+.tab-active,
+.tab-btn.tab-active,
+.tab-btn.tab-active:hover {
+  background: #7c3aed;
+  border-color: #7c3aed;
+  color: white;
+}
+
+.no-session-prompt {
+  background: white;
+  border-radius: 12px;
+  padding: 48px;
+  text-align: center;
+  color: #6b7280;
+  font-size: 15px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.1);
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: #7c3aed;
+  font-size: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
 }
