@@ -55,8 +55,10 @@
     "wait-on": "^9.0.4"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.2.2",
     "phoenix": "^1.8.5",
     "react": "^19.2.4",
-    "react-dom": "^19.2.4"
+    "react-dom": "^19.2.4",
+    "tailwindcss": "^4.2.2"
   }
 }

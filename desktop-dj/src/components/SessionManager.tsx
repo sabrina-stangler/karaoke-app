@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Session } from '../types';
 import { apiService } from '../api';
-import './SessionManager.css';
 
 interface SessionManagerProps {
   session: Session | null;
@@ -55,22 +54,24 @@ export function SessionManager({ session, onSessionCreated, onSessionEnded }: Se
 
   if (session) {
     return (
-      <div className="session-manager active">
-        <div className="session-info">
-          <div className="session-code">
-            <label>Session Code:</label>
-            <div className="code-display">{session.code}</div>
+      <div className="bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white rounded-lg p-6 shadow-md">
+        <div className="flex items-center gap-6 mb-4 flex-wrap">
+          <div className="flex-1 min-w-[200px]">
+            <label className="block text-sm mb-2 opacity-90">Session Code:</label>
+            <div className="text-5xl font-bold tracking-[8px] text-center bg-white/20 px-6 py-4 rounded-lg font-mono">
+              {session.code}
+            </div>
           </div>
-          
+
           {session.dj_name && (
-            <div className="dj-name">
-              <label>DJ:</label>
+            <div className="flex items-center gap-2">
+              <span className="font-semibold opacity-90">DJ:</span>
               <span>{session.dj_name}</span>
             </div>
           )}
 
-          <div className="session-status">
-            <span className={`status-badge ${session.status}`}>
+          <div className="ml-auto">
+            <span className="inline-block px-4 py-2 rounded-full font-semibold text-sm bg-white/20">
               {session.status === 'active' ? '🟢 Active' : '🔴 Ended'}
             </span>
           </div>
@@ -79,7 +80,7 @@ export function SessionManager({ session, onSessionCreated, onSessionEnded }: Se
         <button
           onClick={handleEndSession}
           disabled={isEnding || session.status === 'ended'}
-          className="btn btn-danger"
+          className="w-full py-3 px-6 border-0 rounded-lg text-base font-semibold cursor-pointer transition-all bg-red-500 text-white hover:bg-red-600 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isEnding ? 'Ending...' : 'End Session'}
         </button>
@@ -88,11 +89,11 @@ export function SessionManager({ session, onSessionCreated, onSessionEnded }: Se
   }
 
   return (
-    <div className="session-manager create">
-      <h2>Create New Session</h2>
-      
-      <div className="form-group">
-        <label htmlFor="djName">DJ Name (optional):</label>
+    <div className="bg-white rounded-lg p-6 shadow-md max-w-lg mx-auto">
+      <h2 className="text-xl font-bold text-gray-800 mb-6">Create New Session</h2>
+
+      <div className="mb-4">
+        <label htmlFor="djName" className="block mb-2 font-medium text-gray-700">DJ Name (optional):</label>
         <input
           id="djName"
           type="text"
@@ -101,21 +102,24 @@ export function SessionManager({ session, onSessionCreated, onSessionEnded }: Se
           placeholder="Enter your name"
           disabled={isCreating}
           onKeyDown={(e) => e.key === 'Enter' && handleCreateSession()}
+          className="w-full px-3 py-3 border-2 border-gray-300 rounded-lg text-base transition-colors focus:outline-none focus:border-[#667eea] disabled:bg-gray-100 disabled:cursor-not-allowed"
         />
       </div>
 
-      {error && <div className="error-message">{error}</div>}
+      {error && (
+        <div className="bg-red-50 text-red-800 px-3 py-3 rounded-lg mb-4 border-l-4 border-red-500">{error}</div>
+      )}
 
       <button
         onClick={handleCreateSession}
         disabled={isCreating}
-        className="btn btn-primary"
+        className="w-full py-3 px-6 border-0 rounded-lg text-base font-semibold cursor-pointer transition-all bg-gradient-to-br from-[#667eea] to-[#764ba2] text-white hover:-translate-y-0.5 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
       >
         {isCreating ? 'Creating...' : 'Create Session'}
       </button>
 
-      <div className="info-box">
-        <p>
+      <div className="mt-4 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+        <p className="m-0 text-blue-800 text-sm leading-relaxed">
           Singers will join your karaoke session using a 4-digit code.
           Once created, you'll be able to upload your song catalog.
         </p>
