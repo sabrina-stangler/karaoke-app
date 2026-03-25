@@ -119,7 +119,7 @@ defmodule KaraokeApi.Queue do
     |> Repo.one()
 
     case result do
-      nil -> 0
+      nil -> 1
       max_position -> max_position + 1
     end
   end

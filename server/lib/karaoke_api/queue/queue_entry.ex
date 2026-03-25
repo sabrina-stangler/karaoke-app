@@ -23,7 +23,7 @@ defmodule KaraokeApi.Queue.QueueEntry do
     |> cast(attrs, [:singer_name, :status, :position, :completed_at, :session_id, :song_id])
     |> validate_required([:singer_name, :status, :position, :session_id, :song_id])
     |> validate_inclusion(:status, ["pending", "completed", "skipped"])
-    |> validate_number(:position, greater_than_or_equal_to: 0)
+    |> validate_number(:position, greater_than_or_equal_to: 1)
     |> foreign_key_constraint(:session_id)
     |> foreign_key_constraint(:song_id)
   end
