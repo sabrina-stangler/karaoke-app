@@ -15,7 +15,7 @@ function App() {
   useEffect(() => {
     if (!session) return;
 
-    wsService.connect(session.code).then(() => {
+    wsService.connect(session.id).then(() => {
       wsService.onQueueUpdate((queue: QueueEntry[]) => {
         window.__singerSetQueue?.(queue);
       });

@@ -2,9 +2,9 @@ defmodule KaraokeApiWeb.SessionChannel do
   use KaraokeApiWeb, :channel
 
   @impl true
-  def join("session:" <> session_code, _payload, socket) do
-    # Look up by code (4-digit string), then verify active
-    case KaraokeApi.Sessions.get_session_by_code(session_code) do
+  def join("session:" <> session_id, _payload, socket) do
+    # Look up by UUID, then verify active
+    case KaraokeApi.Sessions.get_session!(session_id) do
       nil ->
         {:error, %{reason: "session not found"}}
 
@@ -15,6 +15,8 @@ defmodule KaraokeApiWeb.SessionChannel do
           {:error, %{reason: "session not active"}}
         end
     end
+  rescue
+    Ecto.NoResultsError -> {:error, %{reason: "session not found"}}
   end
 
   @impl true

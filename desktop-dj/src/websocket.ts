@@ -1,7 +1,12 @@
 import { Socket, Channel } from 'phoenix';
 import { QueueEntry, Song } from './types';
 
-type QueueUpdateHandler = (queue: QueueEntry[]) => void;
+export interface QueueUpdatePayload {
+  action: 'added' | 'completed' | 'skipped' | 'reordered';
+  entry?: QueueEntry;
+}
+
+type QueueUpdateHandler = (payload: QueueUpdatePayload) => void;
 type SongAddedHandler = (song: Song) => void;
 type SessionEndedHandler = () => void;
 
@@ -63,9 +68,9 @@ class WebSocketService {
 
   onQueueUpdate(handler: QueueUpdateHandler) {
     if (!this.channel) return;
-
-    this.channel.on('queue:updated', (payload: { queue: QueueEntry[] }) => {
-      handler(payload.queue);
+    this.channel.off('queue:updated');
+    this.channel.on('queue:updated', (payload: QueueUpdatePayload) => {
+      handler(payload);
     });
   }
 
@@ -79,7 +84,7 @@ class WebSocketService {
 
   onSessionEnded(handler: SessionEndedHandler) {
     if (!this.channel) return;
-
+    this.channel.off('session:ended');
     this.channel.on('session:ended', (_payload: unknown) => {
       handler();
     });

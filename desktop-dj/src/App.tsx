@@ -3,7 +3,7 @@ import { SessionManager } from './components/SessionManager';
 import { MusicLibrary } from './components/MusicLibrary';
 import { QueueDisplay } from './components/QueueDisplay';
 import { wsService } from './websocket';
-import { Session, QueueEntry, Song } from './types';
+import { Session } from './types';
 
 const tabBase = 'px-4 py-2 rounded-lg border-2 text-sm font-medium cursor-pointer transition-all';
 const tabActive = 'bg-[#7c3aed] border-[#7c3aed] text-white';
@@ -15,16 +15,7 @@ function App() {
 
   // Setup WebSocket event handlers
   useEffect(() => {
-    wsService.onQueueUpdate((queue: QueueEntry[]) => {
-      console.log('Queue updated:', queue);
-    });
-
-    wsService.onSongAdded((song: Song) => {
-      console.log('Song added:', song);
-    });
-
     wsService.onSessionEnded(() => {
-      console.log('Session ended');
       handleSessionEnded();
     });
 
@@ -35,7 +26,7 @@ function App() {
 
   const handleSessionCreated = async (sessionData: Session) => {
     setSession(sessionData);
-    wsService.connect(sessionData.code);
+    wsService.connect(sessionData.id);
   };
 
   const handleSessionEnded = () => {
