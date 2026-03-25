@@ -49,7 +49,9 @@ export function QueueView({ sessionId, singerName, refreshTrigger }: QueueViewPr
   const history = queue.filter((e) => e.status === 'completed' || e.status === 'skipped');
   const isMine = (e: QueueEntry) =>
     !!singerName && e.singer_name.toLowerCase() === singerName.toLowerCase();
-  const displayedUpcoming = showMineOnly ? upcoming.filter(isMine) : upcoming;
+  const nowPlaying = upcoming[0] ?? null;
+  const rest = upcoming.slice(1);
+  const displayedRest = showMineOnly ? rest.filter(isMine) : rest;
   const displayedHistory = showMineOnly ? history.filter(isMine) : history;
   const hasMySongs = upcoming.some(isMine);
 
@@ -76,18 +78,34 @@ export function QueueView({ sessionId, singerName, refreshTrigger }: QueueViewPr
 
       {isLoading && queue.length === 0 ? (
         <div className="loading">Loading queue...</div>
-      ) : displayedUpcoming.length === 0 ? (
-        <div className="empty-state">{showMineOnly ? 'No upcoming songs from you' : 'No upcoming songs'}</div>
       ) : (
-        <div className="queue-list">
-          {displayedUpcoming.map((entry) => (
-            <QueueRow
-              key={entry.id}
-              entry={entry}
-              isMine={isMine(entry)}
-            />
-          ))}
-        </div>
+        <>
+          {nowPlaying && (
+            <div className={`now-playing-card ${isMine(nowPlaying) ? 'now-playing-card--mine' : ''}`}>
+              <span className="now-playing-label">🎤 Now Performing</span>
+              <span className="now-playing-title">{nowPlaying.song?.title ?? 'Unknown'}</span>
+              {nowPlaying.song?.artist && (
+                <span className="now-playing-artist">{nowPlaying.song.artist}</span>
+              )}
+              <span className="now-playing-singer">{nowPlaying.singer_name}</span>
+            </div>
+          )}
+
+          {displayedRest.length === 0 && !nowPlaying ? (
+            <div className="empty-state">{showMineOnly ? 'No upcoming songs from you' : 'No upcoming songs'}</div>
+          ) : displayedRest.length > 0 ? (
+            <div className="queue-list">
+              {displayedRest.map((entry) => (
+                <QueueRow
+                  key={entry.id}
+                  entry={entry}
+                  isMine={isMine(entry)}
+                  displayPosition={rest.indexOf(entry) + 2}
+                />
+              ))}
+            </div>
+          ) : null}
+        </>
       )}
 
       {displayedHistory.length > 0 && (

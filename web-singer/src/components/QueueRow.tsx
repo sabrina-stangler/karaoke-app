@@ -4,13 +4,15 @@ interface QueueRowProps {
   entry: QueueEntry;
   isMine?: boolean;
   showStatus?: boolean;
+  displayPosition?: number;
 }
 
-export function QueueRow({ entry, isMine = false, showStatus = false }: QueueRowProps) {
+export function QueueRow({ entry, isMine = false, showStatus = false, displayPosition }: QueueRowProps) {
+  const pos = displayPosition ?? entry.position;
   return (
     <div className={`queue-row ${isMine ? 'queue-row-mine' : ''}`}>
       <div className="queue-position-col">
-        <span className="queue-position">{entry.position}</span>
+        <span className="queue-position">{pos}</span>
         {showStatus && entry.status === 'completed' && (
           <span className="badge badge-completed" title="Completed">✓</span>
         )}
