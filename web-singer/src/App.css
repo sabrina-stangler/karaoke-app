@@ -203,6 +203,8 @@ body {
   border-color: var(--purple);
   color: var(--white);
 }
+.tab-btn.tab-active,
+.tab-btn.tab-active:hover { background: var(--purple); border-color: var(--purple); color: var(--white); }
 
 .app-main {
   flex: 1;
@@ -384,39 +386,33 @@ body {
 }
 .refresh-btn:hover:not(:disabled) { background: rgba(255,255,255,0.3); }
 
-.my-entries {
-  background: #ede9fe;
-  border-radius: 10px;
-  padding: 16px;
-  border: 2px solid var(--purple-light);
-}
-
-.my-entries h3 {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--purple);
-  margin-bottom: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.my-entry-row {
+.queue-header-actions {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 6px 0;
+  gap: 8px;
 }
 
-.entry-position {
-  font-size: 18px;
-  font-weight: 700;
+.filter-btn {
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 2px solid rgba(255,255,255,0.5);
+  background: transparent;
+  color: var(--white);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+}
+
+.filter-btn:hover { background: rgba(255,255,255,0.2); }
+
+.filter-btn--active {
+  background: var(--white);
   color: var(--purple);
-  min-width: 36px;
+  border-color: var(--white);
 }
 
-.entry-song { display: flex; flex-direction: column; gap: 2px; }
-.entry-title { font-size: 14px; font-weight: 600; color: var(--gray-800); }
-.entry-artist { font-size: 12px; color: var(--gray-400); }
+.filter-btn--active:hover { background: rgba(255,255,255,0.85); }
 
 .queue-list {
   background: var(--white);
@@ -427,7 +423,7 @@ body {
 
 .queue-row {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 12px;
   padding: 12px 16px;
   border-bottom: 1px solid var(--gray-100);
@@ -436,32 +432,66 @@ body {
 .queue-row:last-child { border-bottom: none; }
 .queue-row-mine { background: #ede9fe; }
 
-.queue-position {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--purple);
-  min-width: 32px;
-  text-align: center;
+.queue-position-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  flex-shrink: 0;
 }
 
-.queue-song { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.queue-title { font-size: 14px; font-weight: 600; color: var(--gray-800); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.queue-artist { font-size: 12px; color: var(--gray-400); }
-.queue-singer { font-size: 13px; color: var(--gray-600); white-space: nowrap; }
+.queue-position {
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--white);
+  background: var(--purple);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.queue-song { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; flex: 1; min-width: 0; }
+.queue-title { font-size: 14px; font-weight: 600; color: var(--gray-800); word-break: break-word; text-align: left; }
+.queue-artist { font-size: 12px; color: var(--gray-400); text-align: left; }
+.queue-singer { font-size: 13px; color: var(--purple); font-weight: 600; word-break: break-word; text-align: left; }
+
+/* ===== History section ===== */
+.history-section {
+  margin-top: 16px;
+  border-top: 1px dashed var(--gray-200);
+  padding-top: 8px;
+}
+.history-toggle {
+  background: none;
+  border: none;
+  color: var(--white);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 0;
+  width: 100%;
+  text-align: left;
+}
+.history-toggle:hover { color: rgba(255,255,255,0.7); }
+.history-list { margin-top: 8px; }
+.history-row { opacity: 0.6; }
 
 /* ===== Badges ===== */
 .badge {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
-  padding: 3px 8px;
+  padding: 2px 6px;
   border-radius: 20px;
-  text-transform: capitalize;
   white-space: nowrap;
+  line-height: 1;
 }
 
 .badge-pending  { background: #fef3c7; color: #d97706; }
 .badge-completed { background: #d1fae5; color: #059669; }
-.badge-skipped  { background: #fee2e2; color: #dc2626; }
+.badge-skipped  { background: #fef3c7; color: #b45309; }
 
 /* ===== Utility ===== */
 .loading, .empty-state {
