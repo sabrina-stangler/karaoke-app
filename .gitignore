@@ -13,6 +13,9 @@ dist
 dist-ssr
 *.local
 
+# Desktop
+release
+
 # Backend (Elixir/Phoenix)
 /_build
 /deps
