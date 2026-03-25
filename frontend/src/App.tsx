@@ -9,6 +9,10 @@ function App() {
 
   return (
     <>
+      <div className="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-4 py-2 text-center font-semibold">
+        🎉 Tailwind CSS is now configured! 🎨
+      </div>
+      
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />

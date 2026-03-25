@@ -1,73 +1,91 @@
-# React + TypeScript + Vite
+# Karaoke App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A full-stack karaoke application with a React TypeScript frontend and an Elixir Phoenix backend.
 
-Currently, two official plugins are available:
+## Project Structure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+This is a monorepo containing:
 
-## React Compiler
+- **frontend/** - React TypeScript application built with Vite
+- **backend/** - Elixir Phoenix API server
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Prerequisites
 
-## Expanding the ESLint configuration
+- Node.js 18+ and npm
+- Elixir 1.19+
+- Erlang/OTP 28+
+- PostgreSQL 14+
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Getting Started
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Frontend Setup
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+cd frontend
+npm install
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The frontend will be available at http://localhost:5173
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Backend Setup
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Configure your database in `backend/config/dev.exs`
+
+2. Create and migrate the database:
+```bash
+cd backend
+mix ecto.create
+mix ecto.migrate
 ```
+
+3. Start the Phoenix server:
+```bash
+mix phx.server
+```
+
+The backend API will be available at http://localhost:4000
+
+## Development
+
+### Running Both Services
+
+You can use the provided Makefile commands:
+
+```bash
+make install    # Install all dependencies
+make dev        # Run both frontend and backend
+make test       # Run all tests
+```
+
+Or run them separately in different terminals:
+
+**Terminal 1 (Frontend):**
+```bash
+cd frontend && npm run dev
+```
+
+**Terminal 2 (Backend):**
+```bash
+cd backend && mix phx.server
+```
+
+## Project Commands
+
+### Frontend
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+
+### Backend
+- `mix phx.server` - Start Phoenix server
+- `iex -S mix phx.server` - Start Phoenix with interactive shell
+- `mix test` - Run tests
+- `mix ecto.create` - Create database
+- `mix ecto.migrate` - Run migrations
+- `mix ecto.reset` - Drop, create, and migrate database
+
+## License
+
+See LICENSE file for details.

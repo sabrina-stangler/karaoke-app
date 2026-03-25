@@ -7,10 +7,25 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Frontend
 node_modules
 dist
 dist-ssr
 *.local
+
+# Backend (Elixir/Phoenix)
+/_build
+/deps
+/*.ez
+erl_crash.dump
+*.beam
+/config/*.secret.exs
+.elixir_ls/
+
+# Database
+*.db
+*.db-shm
+*.db-wal
 
 # Editor directories and files
 .vscode/*
