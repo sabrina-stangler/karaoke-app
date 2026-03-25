@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "phoenix": "^1.8.5",
     "react": "^19.2.4",
     "react-dom": "^19.2.4"
   },

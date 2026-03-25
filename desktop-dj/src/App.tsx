@@ -1,53 +1,95 @@
 import { useState, useEffect } from 'react';
 import './App.css';
+import { SessionManager } from './components/SessionManager';
+import { MusicLibrary } from './components/MusicLibrary';
+import { QueueDisplay } from './components/QueueDisplay';
+import { wsService } from './websocket';
+import { Session, QueueEntry, Song } from './types';
 
 const API_URL = 'http://localhost:4000';
 
 function App() {
-  const [isConnected, setIsConnected] = useState(false);
-  const [apiStatus, setApiStatus] = useState('Checking...');
+  const [session, setSession] = useState<Session | null>(null);
+  const [wsConnected, setWsConnected] = useState(false);
+  const [apiConnected, setApiConnected] = useState(false);
 
+  // Check API connectivity
   useEffect(() => {
-    // Check if backend is reachable
     fetch(API_URL)
-      .then(() => {
-        setIsConnected(true);
-        setApiStatus('Connected to Elixir API');
-      })
-      .catch(() => {
-        setIsConnected(false);
-        setApiStatus('Unable to connect to API');
-      });
+      .then(() => setApiConnected(true))
+      .catch(() => setApiConnected(false));
   }, []);
+
+  // Setup WebSocket event handlers
+  useEffect(() => {
+    wsService.onQueueUpdate((queue: QueueEntry[]) => {
+      console.log('Queue updated:', queue);
+    });
+
+    wsService.onSongAdded((song: Song) => {
+      console.log('Song added:', song);
+    });
+
+    wsService.onSessionEnded(() => {
+      console.log('Session ended');
+      handleSessionEnded();
+    });
+
+    return () => {
+      wsService.disconnect();
+    };
+  }, []);
+
+  const handleSessionCreated = async (sessionData: Session) => {
+    setSession(sessionData);
+    const connected = await wsService.connect(sessionData.code);
+    setWsConnected(connected);
+  };
+
+  const handleSessionEnded = () => {
+    wsService.disconnect();
+    setSession(null);
+    setWsConnected(false);
+  };
 
   return (
     <div className="app">
       <header className="app-header">
-        <h1>� Karaoke Desktop DJ</h1>
-        <div className={`status ${isConnected ? 'connected' : 'disconnected'}`}>
-          {apiStatus}
+        <div className="header-content">
+          <h1>🎤 Karaoke Desktop DJ</h1>
+          <div className="connection-status">
+            <div className={`status-badge ${apiConnected ? 'connected' : 'disconnected'}`}>
+              API: {apiConnected ? 'Connected' : 'Disconnected'}
+            </div>
+            <div className={`status-badge ${wsConnected ? 'connected' : 'disconnected'}`}>
+              WebSocket: {wsConnected ? 'Connected' : 'Disconnected'}
+            </div>
+          </div>
         </div>
       </header>
 
       <main className="app-main">
-        <div className="card">
-          <h2>Welcome to the Desktop DJ App</h2>
-          <p>
-            This Electron app connects to the same Elixir Phoenix backend
-            at <code>{API_URL}</code>
-          </p>
-          
-          <div className="info">
-            <p><strong>Platform:</strong> {(window as any).electron?.platform || 'unknown'}</p>
-            <p><strong>Status:</strong> {isConnected ? '✅ Ready' : '❌ Backend Offline'}</p>
+        <div className="app-container">
+          <div className="left-panel">
+            <SessionManager
+              session={session}
+              onSessionCreated={handleSessionCreated}
+              onSessionEnded={handleSessionEnded}
+            />
+            {session && (
+              <MusicLibrary
+                sessionId={session.id}
+              />
+            )}
           </div>
 
-          {!isConnected && (
-            <div className="warning">
-              Make sure the backend is running:<br />
-              <code>cd backend && mix phx.server</code>
-            </div>
-          )}
+          <div className="right-panel">
+            {session && (
+              <QueueDisplay
+                sessionId={session.id}
+              />
+            )}
+          </div>
         </div>
       </main>
     </div>

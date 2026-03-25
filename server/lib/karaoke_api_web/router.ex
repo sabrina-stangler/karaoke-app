@@ -20,10 +20,27 @@ defmodule KaraokeApiWeb.Router do
     get "/", PageController, :home
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", KaraokeApiWeb do
-  #   pipe_through :api
-  # end
+  # API routes
+  scope "/api", KaraokeApiWeb do
+    pipe_through :api
+
+    # Session routes
+    post "/sessions", SessionController, :create
+    get "/sessions/:code", SessionController, :show_by_code
+    put "/sessions/:id/end", SessionController, :end_session
+
+    # Song routes
+    get "/sessions/:session_id/songs", SongController, :index
+    post "/sessions/:session_id/songs/bulk", SongController, :create_bulk
+    get "/sessions/:session_id/songs/search", SongController, :search
+
+    # Queue routes
+    get "/sessions/:session_id/queue", QueueController, :index
+    post "/sessions/:session_id/queue", QueueController, :create
+    put "/queue/:id/complete", QueueController, :complete
+    put "/queue/:id/skip", QueueController, :skip
+    put "/queue/reorder", QueueController, :reorder
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:karaoke_api, :dev_routes) do

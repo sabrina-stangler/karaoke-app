@@ -15,6 +15,11 @@ defmodule KaraokeApiWeb.Endpoint do
     websocket: [connect_info: [session: @session_options]],
     longpoll: [connect_info: [session: @session_options]]
 
+  # API WebSocket for real-time updates
+  socket "/socket", KaraokeApiWeb.UserSocket,
+    websocket: true,
+    longpoll: false
+
   # Serve at "/" the static files from "priv/static" directory.
   #
   # When code reloading is disabled (e.g., in production),
@@ -51,5 +56,6 @@ defmodule KaraokeApiWeb.Endpoint do
   plug Plug.MethodOverride
   plug Plug.Head
   plug Plug.Session, @session_options
+  plug KaraokeApiWeb.Plugs.CORS
   plug KaraokeApiWeb.Router
 end
