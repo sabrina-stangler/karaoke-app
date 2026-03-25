@@ -109,10 +109,10 @@ export function SongBrowser({
   };
 
   return (
-    <div className="browser-container">
+    <div className="flex flex-col gap-4">
       {/* Singer name bar */}
-      <div className="singer-bar">
-        <label className="singer-label">Your name:</label>
+      <div className="bg-white rounded-lg p-4 flex items-center gap-3 flex-wrap shadow-lg">
+        <label className="text-sm font-semibold text-gray-600 whitespace-nowrap">Your name:</label>
         <input
           type="text"
           value={singerName}
@@ -121,54 +121,62 @@ export function SongBrowser({
             setNameError('');
           }}
           placeholder="Enter your name"
-          className={`singer-name-input ${nameError ? 'input-error' : ''}`}
+          className={`flex-1 min-w-40 px-3 py-2 border-2 ${nameError ? 'border-red-500' : 'border-gray-200'} rounded-lg text-sm outline-none focus:border-violet-600 transition-colors`}
           maxLength={50}
         />
-        {nameError && <span className="name-error">{nameError}</span>}
+        {nameError && <span className="text-xs text-red-500 w-full">{nameError}</span>}
       </div>
 
       {/* Search */}
-      <div className="search-row">
+      <div className="flex items-center gap-3">
         <input
           type="text"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Search songs or artists..."
-          className="search-input"
+          className="flex-1 px-4 py-2.5 border-2 border-gray-200 rounded-lg text-sm bg-white outline-none focus:border-violet-600 shadow-lg transition-colors"
         />
-        <span className="song-count">{filteredSongs.length} songs</span>
+        <span className="text-[13px] text-gray-400 whitespace-nowrap">{filteredSongs.length} songs</span>
       </div>
 
       {successMessage && (
-        <div className="success-banner">{successMessage}</div>
+        <div className="bg-emerald-100 text-emerald-800 px-4 py-3 rounded-lg text-sm font-medium text-center">
+          {successMessage}
+        </div>
       )}
-      {error && <div className="error-banner">{error}</div>}
+      {error && (
+        <div className="bg-red-100 text-red-700 px-4 py-3 rounded-lg text-sm text-center">{error}</div>
+      )}
 
       {/* Song list */}
       {isLoading ? (
-        <div className="loading">Loading songs...</div>
+        <div className="text-center py-12 px-6 text-gray-400 text-sm bg-white rounded-lg shadow-lg">
+          Loading songs...
+        </div>
       ) : filteredSongs.length === 0 ? (
-        <div className="empty-state">
+        <div className="text-center py-12 px-6 text-gray-400 text-sm bg-white rounded-lg shadow-lg">
           {searchQuery ? 'No songs match your search' : 'No songs in the library yet'}
         </div>
       ) : (
-        <div className="song-list">
+        <div className="bg-white rounded-lg shadow-lg overflow-hidden max-h-[calc(100vh-280px)] overflow-y-auto">
           {filteredSongs.map((song) => (
             <div
               key={song.id}
-              className={`song-row ${selectedSong?.id === song.id ? 'song-row-selected' : ''}`}
+              className={`flex items-center gap-3 px-4 py-3 border-b border-gray-100 cursor-pointer transition-colors last:border-b-0 ${
+                selectedSong?.id === song.id ? 'bg-violet-50' : 'hover:bg-gray-50'
+              }`}
               onClick={() => setSelectedSong(selectedSong?.id === song.id ? null : song)}
             >
-              <div className="song-info">
-                <span className="song-title">{song.title}</span>
-                <span className="song-artist">{song.artist}</span>
+              <div className="flex-1 flex flex-col gap-0.5 min-w-0">
+                <span className="text-sm font-semibold text-gray-800 truncate">{song.title}</span>
+                <span className="text-xs text-gray-400 truncate">{song.artist}</span>
               </div>
               {song.duration && (
-                <span className="song-duration">{formatDuration(song.duration)}</span>
+                <span className="text-xs text-gray-400 whitespace-nowrap">{formatDuration(song.duration)}</span>
               )}
               {selectedSong?.id === song.id && (
                 <button
-                  className="request-btn"
+                  className="bg-violet-600 text-white px-3.5 py-1.5 rounded-lg text-[13px] font-semibold cursor-pointer whitespace-nowrap hover:bg-violet-800 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleRequest();

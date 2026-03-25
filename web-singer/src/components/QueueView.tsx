@@ -56,45 +56,59 @@ export function QueueView({ sessionId, singerName, refreshTrigger }: QueueViewPr
   const hasMySongs = upcoming.some(isMine);
 
   return (
-    <div className="queue-container">
-      <div className="queue-header">
-        <h2>Queue</h2>
-        <div className="queue-header-actions">
+    <div className="flex flex-col gap-4">
+      <div className="flex justify-between items-center">
+        <h2 className="text-xl font-bold text-white">Queue</h2>
+        <div className="flex items-center gap-2">
           {hasMySongs && (
             <button
-              className={`filter-btn ${showMineOnly ? 'filter-btn--active' : ''}`}
+              className={showMineOnly
+                ? 'px-3 py-1.5 rounded-full border-2 border-white bg-white text-violet-600 text-[13px] font-semibold cursor-pointer hover:bg-white/85 transition-all'
+                : 'px-3 py-1.5 rounded-full border-2 border-white/50 bg-transparent text-white text-[13px] font-semibold cursor-pointer hover:bg-white/20 transition-all'}
               onClick={() => setShowMineOnly((v) => !v)}
             >
               {showMineOnly ? '★ My songs' : '☆ My songs'}
             </button>
           )}
-          <button className="refresh-btn" onClick={loadQueue} disabled={isLoading}>
+          <button
+            className="bg-white/20 text-white px-3.5 py-1.5 rounded-lg text-[13px] cursor-pointer hover:bg-white/30 transition-colors disabled:opacity-50"
+            onClick={loadQueue}
+            disabled={isLoading}
+          >
             {isLoading ? '...' : '↻ Refresh'}
           </button>
         </div>
       </div>
 
-      {error && <div className="error-banner">{error}</div>}
+      {error && (
+        <div className="bg-red-100 text-red-700 px-4 py-3 rounded-lg text-sm text-center">{error}</div>
+      )}
 
       {isLoading && queue.length === 0 ? (
-        <div className="loading">Loading queue...</div>
+        <div className="text-center py-12 px-6 text-gray-400 text-sm bg-white rounded-lg shadow-lg">
+          Loading queue...
+        </div>
       ) : (
         <>
           {nowPlaying && (
-            <div className={`now-playing-card ${isMine(nowPlaying) ? 'now-playing-card--mine' : ''}`}>
-              <span className="now-playing-label">🎤 Now Performing</span>
-              <span className="now-playing-title">{nowPlaying.song?.title ?? 'Unknown'}</span>
+            <div className={`bg-white rounded-xl p-4 flex flex-col gap-1 shadow-lg border-l-4 ${isMine(nowPlaying) ? 'border-violet-600 bg-violet-50' : 'border-violet-600'}`}>
+              <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-violet-600 mb-1">
+                🎤 Now Performing
+              </span>
+              <span className="text-base font-bold text-gray-800">{nowPlaying.song?.title ?? 'Unknown'}</span>
               {nowPlaying.song?.artist && (
-                <span className="now-playing-artist">{nowPlaying.song.artist}</span>
+                <span className="text-[13px] text-gray-400">{nowPlaying.song.artist}</span>
               )}
-              <span className="now-playing-singer">{nowPlaying.singer_name}</span>
+              <span className="text-[13px] font-semibold text-violet-600 mt-1">{nowPlaying.singer_name}</span>
             </div>
           )}
 
           {displayedRest.length === 0 && !nowPlaying ? (
-            <div className="empty-state">{showMineOnly ? 'No upcoming songs from you' : 'No upcoming songs'}</div>
+            <div className="text-center py-12 px-6 text-gray-400 text-sm bg-white rounded-lg shadow-lg">
+              {showMineOnly ? 'No upcoming songs from you' : 'No upcoming songs'}
+            </div>
           ) : displayedRest.length > 0 ? (
-            <div className="queue-list">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden">
               {displayedRest.map((entry) => (
                 <QueueRow
                   key={entry.id}
@@ -109,14 +123,19 @@ export function QueueView({ sessionId, singerName, refreshTrigger }: QueueViewPr
       )}
 
       {displayedHistory.length > 0 && (
-        <div className="history-section">
-          <button className="history-toggle" onClick={() => setShowHistory((v) => !v)}>
+        <div className="mt-4 border-t border-dashed border-white/30 pt-2">
+          <button
+            className="bg-transparent border-none text-white text-[13px] cursor-pointer py-1 w-full text-left hover:text-white/70 transition-colors"
+            onClick={() => setShowHistory((v) => !v)}
+          >
             {showHistory ? '▲ Hide history' : `▼ Show history (${displayedHistory.length})`}
           </button>
           {showHistory && (
-            <div className="queue-list history-list">
+            <div className="bg-white rounded-lg shadow-lg overflow-hidden mt-2">
               {displayedHistory.map((entry) => (
-                <QueueRow key={entry.id} entry={entry} showStatus />
+                <div key={entry.id} className="opacity-60">
+                  <QueueRow entry={entry} showStatus />
+                </div>
               ))}
             </div>
           )}

@@ -36,13 +36,15 @@ export function JoinSession({ onJoined }: JoinSessionProps) {
   };
 
   return (
-    <div className="join-container">
-      <div className="join-card">
-        <div className="join-icon">🎤</div>
-        <h1>Karaoke Night</h1>
-        <p className="join-subtitle">Enter the 4-digit code shown by your DJ to join the session</p>
+    <div className="min-h-screen flex items-center justify-center p-6">
+      <div className="bg-white rounded-xl shadow-xl py-12 px-10 w-full max-w-md text-center">
+        <div className="text-[56px] mb-4">🎤</div>
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">Karaoke Night</h1>
+        <p className="text-gray-600 text-sm mb-8 leading-relaxed">
+          Enter the 4-digit code shown by your DJ to join the session
+        </p>
 
-        <form onSubmit={handleSubmit} className="join-form">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <input
             type="text"
             inputMode="numeric"
@@ -54,11 +56,15 @@ export function JoinSession({ onJoined }: JoinSessionProps) {
               setError('');
             }}
             placeholder="1234"
-            className="code-input"
+            className="text-4xl font-bold text-center p-4 border-2 border-gray-200 rounded-lg text-violet-600 outline-none w-full focus:border-violet-600 transition-colors tracking-[12px]"
             autoFocus
           />
-          {error && <p className="error-message">{error}</p>}
-          <button type="submit" className="join-btn" disabled={isLoading || code.length !== 4}>
+          {error && <p className="text-red-500 text-[13px] text-left">{error}</p>}
+          <button
+            type="submit"
+            className="bg-violet-600 text-white py-3.5 px-6 rounded-lg text-base font-semibold cursor-pointer hover:bg-violet-800 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+            disabled={isLoading || code.length !== 4}
+          >
             {isLoading ? 'Joining...' : 'Join Session'}
           </button>
         </form>
