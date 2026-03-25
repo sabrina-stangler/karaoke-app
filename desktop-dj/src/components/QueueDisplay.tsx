@@ -62,7 +62,7 @@ export function QueueDisplay({ sessionId, onQueueUpdated }: QueueDisplayProps) {
         <h2>🎤 Request Queue</h2>
         <div className="queue-controls">
           <span className="queue-count">
-            {pendingCount} pending
+            {pendingCount} upcoming
           </span>
           <div className="filter-buttons">
             <button
@@ -75,7 +75,7 @@ export function QueueDisplay({ sessionId, onQueueUpdated }: QueueDisplayProps) {
               onClick={() => setFilter('pending')}
               className={`btn btn-sm ${filter === 'pending' ? 'btn-primary' : 'btn-secondary'}`}
             >
-              Pending ({pendingCount})
+              Upcoming ({pendingCount})
             </button>
           </div>
           <button onClick={loadQueue} className="btn btn-secondary btn-sm">
@@ -117,7 +117,7 @@ export function QueueDisplay({ sessionId, onQueueUpdated }: QueueDisplayProps) {
 
               <div className="queue-item-status">
                 {entry.status === 'pending' ? (
-                  <span className="status-badge pending">⏳ Pending</span>
+                  <span className="status-badge pending">⏳ Upcoming</span>
                 ) : entry.status === 'completed' ? (
                   <span className="status-badge completed">✅ Completed</span>
                 ) : (

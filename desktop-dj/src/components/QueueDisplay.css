@@ -97,7 +97,7 @@
   margin-bottom: 8px;
 }
 
-.song-title {
+.queue-item-song .song-title {
   display: block;
   font-weight: 600;
   font-size: 16px;
@@ -108,7 +108,7 @@
   white-space: nowrap;
 }
 
-.song-artist {
+.queue-item-song .song-artist {
   display: block;
   color: #666;
   font-size: 14px;
