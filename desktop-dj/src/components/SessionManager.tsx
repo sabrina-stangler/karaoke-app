@@ -109,6 +109,12 @@ export function SessionManager({
       >
         {isCreating ? "Creating..." : "Start Session"}
       </button>
+      <div className="mt-4 p-3 bg-blue-50 rounded-lg border-l-4 border-blue-400">
+        <p className="m-0 text-blue-800 text-sm leading-relaxed">
+          Singers will join your karaoke session using a 4-digit code. Once
+          created, you'll be able to upload your song catalog.
+        </p>
+      </div>
     </div>
   );
 }

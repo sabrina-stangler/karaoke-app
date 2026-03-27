@@ -107,26 +107,28 @@ function App() {
               ⚙ Settings
             </button>
           </div>
+
+          {/* Right-side: DJ name + code (match SessionManager styling) */}
           <div className="flex items-center gap-3">
-            {session ? (
-              <>
-                {(session.dj_name || djName) && (
-                  <span className="text-sm text-gray-500">
-                    DJ:{" "}
-                    <span className="font-semibold text-gray-700">
-                      {session.dj_name || djName}
-                    </span>
-                  </span>
-                )}
-                <span className="px-3 py-1.5 rounded bg-[#7c3aed] text-white font-mono font-bold text-base tracking-widest">
-                  {session.code}
+            <div className="flex items-center gap-4">
+              <div className="text-sm text-gray-500 flex items-center gap-2">
+                <span className="font-semibold text-gray-700">DJ:</span>
+                <span className="font-semibold text-gray-700">
+                  {session?.dj_name || djName || ""}
                 </span>
-              </>
-            ) : (
-              <span className="text-sm text-gray-400 italic">
-                {djName ? `DJ: ${djName}` : "No active session"}
-              </span>
-            )}
+              </div>
+
+              {/* Session code box — styled like SessionManager; show NONE when no session */}
+              <div
+                className={
+                  session
+                    ? "px-3 py-1.5 rounded bg-[#7c3aed] text-white font-mono font-bold text-base tracking-widest"
+                    : "px-3 py-1.5 rounded bg-gray-200 text-gray-600 font-mono font-bold text-base tracking-widest"
+                }
+              >
+                {session ? session.code : "INACTIVE"}
+              </div>
+            </div>
           </div>
         </div>
       </header>
