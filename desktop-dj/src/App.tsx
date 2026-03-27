@@ -17,6 +17,10 @@ function App() {
     "queue",
   );
 
+  // NEW: DJ Name state + gate
+  const [djName, setDjName] = useState<string>("");
+  const [tempDjName, setTempDjName] = useState<string>("");
+
   // Setup WebSocket event handlers
   useEffect(() => {
     wsService.onSessionEnded(() => {
@@ -38,8 +42,43 @@ function App() {
     setSession(null);
   };
 
+  const handleSetDjName = () => {
+    if (tempDjName.trim()) {
+      setDjName(tempDjName.trim());
+    }
+  };
+
+  const isLocked = !djName;
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col relative">
+      {/* DJ NAME GATE MODAL */}
+      {isLocked && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-xl p-8 shadow-xl w-full max-w-md text-center">
+            <h2 className="text-xl font-bold mb-4 text-gray-800">
+              Set Your DJ Name
+            </h2>
+            <input
+              type="text"
+              value={tempDjName}
+              onChange={(e) => setTempDjName(e.target.value)}
+              placeholder="Enter DJ name..."
+              className="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4 focus:outline-none focus:border-[#7c3aed]"
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleSetDjName();
+              }}
+            />
+            <button
+              onClick={handleSetDjName}
+              className="w-full bg-[#7c3aed] text-white py-2 rounded-lg font-semibold hover:opacity-90 transition"
+            >
+              Continue
+            </button>
+          </div>
+        </div>
+      )}
+
       <header className="bg-white shadow-md px-6 py-4">
         <div className="max-w-7xl mx-auto flex justify-between items-center flex-wrap gap-4">
           <h1 className="text-2xl font-bold text-gray-800 m-0">
@@ -47,19 +86,22 @@ function App() {
           </h1>
           <div className="flex gap-2">
             <button
-              className={`${tabBase} ${activeTab === "queue" ? tabActive : tabInactive}`}
+              disabled={isLocked}
+              className={`${tabBase} ${activeTab === "queue" ? tabActive : tabInactive} ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`}
               onClick={() => setActiveTab("queue")}
             >
               Queue
             </button>
             <button
-              className={`${tabBase} ${activeTab === "library" ? tabActive : tabInactive}`}
+              disabled={isLocked}
+              className={`${tabBase} ${activeTab === "library" ? tabActive : tabInactive} ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`}
               onClick={() => setActiveTab("library")}
             >
               🎵 Library
             </button>
             <button
-              className={`${tabBase} ${activeTab === "settings" ? tabActive : tabInactive}`}
+              disabled={isLocked}
+              className={`${tabBase} ${activeTab === "settings" ? tabActive : tabInactive} ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`}
               onClick={() => setActiveTab("settings")}
             >
               ⚙ Settings
@@ -68,11 +110,11 @@ function App() {
           <div className="flex items-center gap-3">
             {session ? (
               <>
-                {session.dj_name && (
+                {(session.dj_name || djName) && (
                   <span className="text-sm text-gray-500">
                     DJ:{" "}
                     <span className="font-semibold text-gray-700">
-                      {session.dj_name}
+                      {session.dj_name || djName}
                     </span>
                   </span>
                 )}
@@ -82,7 +124,7 @@ function App() {
               </>
             ) : (
               <span className="text-sm text-gray-400 italic">
-                No active session
+                {djName ? `DJ: ${djName}` : "No active session"}
               </span>
             )}
           </div>
@@ -130,6 +172,7 @@ function App() {
               session={session}
               onSessionCreated={handleSessionCreated}
               onSessionEnded={handleSessionEnded}
+              djName={djName}
             />
           </div>
         )}
