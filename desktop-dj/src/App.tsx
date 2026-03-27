@@ -13,7 +13,7 @@ const tabInactive =
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
-  const [activeTab, setActiveTab] = useState<"queue" | "settings" | "library">(
+  const [activeTab, setActiveTab] = useState<"queue" | "session" | "library">(
     "queue",
   );
 
@@ -94,17 +94,17 @@ function App() {
             </button>
             <button
               disabled={isLocked}
-              className={`${tabBase} ${activeTab === "library" ? tabActive : tabInactive} ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`}
-              onClick={() => setActiveTab("library")}
+              className={`${tabBase} ${activeTab === "session" ? tabActive : tabInactive} ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`}
+              onClick={() => setActiveTab("session")}
             >
-              🎵 Library
+              Session
             </button>
             <button
               disabled={isLocked}
-              className={`${tabBase} ${activeTab === "settings" ? tabActive : tabInactive} ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`}
-              onClick={() => setActiveTab("settings")}
+              className={`${tabBase} ${activeTab === "library" ? tabActive : tabInactive} ${isLocked ? "opacity-50 cursor-not-allowed" : ""}`}
+              onClick={() => setActiveTab("library")}
             >
-              ⚙ Settings
+              Music Library
             </button>
           </div>
 
@@ -143,9 +143,9 @@ function App() {
                 No active session. Go to{" "}
                 <button
                   className="bg-transparent border-0 text-[#7c3aed] font-semibold cursor-pointer underline p-0 text-sm"
-                  onClick={() => setActiveTab("settings")}
+                  onClick={() => setActiveTab("session")}
                 >
-                  Settings
+                  Session
                 </button>{" "}
                 to create one.
               </div>
@@ -160,9 +160,9 @@ function App() {
                 No active session. Go to{" "}
                 <button
                   className="bg-transparent border-0 text-[#7c3aed] font-semibold cursor-pointer underline p-0 text-sm"
-                  onClick={() => setActiveTab("settings")}
+                  onClick={() => setActiveTab("session")}
                 >
-                  Settings
+                  Session
                 </button>{" "}
                 to create one.
               </div>
